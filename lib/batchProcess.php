@@ -53,7 +53,6 @@ function batchProcess($filename) {
 // DB Stuff
 
 include_once( dirname( __FILE__ ) . '/bvbdb.php' );
-//$myDB = new wpdb('root','','barker_remittance','localhost');
 $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
           
 
