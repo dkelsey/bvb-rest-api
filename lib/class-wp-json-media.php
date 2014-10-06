@@ -109,8 +109,6 @@ class WP_JSON_Media extends WP_JSON_Posts {
 				// Use the same method image_downsize() does
 				$size_data['url'] = str_replace( $img_url_basename, $size_data['file'], $data['source'] );
 			}
-		} else {
-		    $data['attachment_meta']['sizes'] = new stdClass;
 		}
 
 		// Override entity meta keys with the correct links
@@ -188,18 +186,8 @@ class WP_JSON_Media extends WP_JSON_Posts {
 	 * @param array $_headers HTTP headers from the request
 	 * @return array|WP_Error Attachment data or error
 	 */
-	public function upload_attachment( $_files, $_headers, $post_id = 0 ) {
-
+	public function upload_attachment( $_files, $_headers ) {
 		$post_type = get_post_type_object( 'attachment' );
-		
-		if ( $post_id == 0 ) {
-			$post_parent_type = get_post_type_object( 'post' );
-		} else {
-			$post_parent_type = get_post_type_object( get_post_type( $post_id ) );
-		}
-
-		// Make sure we have an int or 0
-		$post_id = (int) $post_id;
 
 		if ( ! $post_type ) {
 			return new WP_Error( 'json_invalid_post_type', __( 'Invalid post type' ), array( 'status' => 400 ) );
@@ -207,12 +195,7 @@ class WP_JSON_Media extends WP_JSON_Posts {
 
 		// Permissions check - Note: "upload_files" cap is returned for an attachment by $post_type->cap->create_posts
 		if ( ! current_user_can( $post_type->cap->create_posts ) || ! current_user_can( $post_type->cap->edit_posts ) ) {
-			return new WP_Error( 'json_cannot_create', __( 'Sorry, you are not allowed to post on this site.' ), array( 'status' => 400 ) );
-		}
-
-		// If a user is trying to attach to a post make sure they have permissions. Bail early if post_id is not being passed
-		if ( $post_id !== 0 && ! current_user_can( $post_parent_type->cap->edit_post, $post_id ) ) {
-			return new WP_Error( 'json_cannot_edit', __( 'Sorry, you are not allowed to edit this post.' ), array( 'status' => 401 ) );
+			return new WP_Error( 'json_cannot_create', __( 'Sorry, you are not allowed to post on this site.'. $post_type->cap->edit_posts ), array( 'status' => 400 ) );
 		}
 
 		// Get the file via $_FILES or raw data
@@ -252,7 +235,7 @@ class WP_JSON_Media extends WP_JSON_Posts {
 		$attachment = array(
 			'post_mime_type' => $type,
 			'guid'           => $url,
-			'post_parent'    => $post_id,
+			// 'post_parent' => $post_id,
 			'post_title'     => $title,
 			'post_content'   => $content,
 		);
@@ -263,7 +246,7 @@ class WP_JSON_Media extends WP_JSON_Posts {
 		}
 
 		// Save the data
-		$id = wp_insert_attachment($attachment, $file, $post_id );
+		$id = wp_insert_attachment($attachment, $file /*, $post_id */);
 
 		if ( !is_wp_error($id) ) {
 			wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
