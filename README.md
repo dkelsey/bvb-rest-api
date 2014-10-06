@@ -2,8 +2,6 @@
 
 This is derived from the [WP-API](https://github.com/WP-API/WP-API) (which enables Access to your WordPress site's data through an easy-to-use HTTP REST API).  I've stripped out that functionality and added just the ability to upload, validate and process CSV files.  This is part of an Admin Console plugin I developed for validating and loading specificic CSVs into the underlying wordpress DB - into another DB Schema. 
 
-[![Build Status](https://travis-ci.org/WP-API/WP-API.svg?branch=master)](https://travis-ci.org/WP-API/WP-API)
-
 ## About
 
 The WP-API is well documented in the original repo (please check it out).  I was creating an Admin Console
