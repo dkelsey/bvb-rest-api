@@ -184,14 +184,10 @@ class WP_JSON_Uploads extends WP_JSON_Posts {
 	 */
 	public function delete_upload( $filename, $force = false, $reassign = null ) {
 
-		return array( 'message' => __( 'Deleted ' . basename($filename) ) );
-		$result = wp_delete_user( $id, $reassign );
+	     if ( unlink( UPLOADS_DIR . $filename) )
+                  return array('message' => sprintf('%s has been deleted', $filename ) );
+             else
+                  return array('message' => sprintf('%s could not be deleted', $filename) );
 
-		if ( ! $result ) {
-			return new WP_Error( 'json_cannot_delete', __( 'The user cannot be deleted.' ), array( 'status' => 500 ) );
-		} else {
-			return array( 'message' => __( 'Deleted user' ) );
-		}
-		return array( 'message' => __( 'Deleted ' . basename($filename) ) );
 	}
 }
