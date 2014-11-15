@@ -29,7 +29,7 @@ function batchVerify($filename) {
      $fh = fopen($filename, 'r');
      if ($fh) {
           $line = trim(fgets($fh));
-          $header = explode(",", $line);
+          $header = str_getcsv($line);
           $result = array_diff($header, $headerTemplate);
           if (sizeof($result)) {
                return array( 'format_error' => array( 'filename' => basename($filename), 'differences' => $result) );

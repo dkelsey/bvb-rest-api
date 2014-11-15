@@ -61,7 +61,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
           return array( 'fopen_error' => "There was an error opening $filename" );
      } else {
           $line = trim(fgets($fh));
-          $header = explode(",", $line);
+          $header = str_getcsv($line);
           $result = array_diff($header, $headerTemplate);
           if (sizeof($result)) {
                return array( 'format_error' => array( 'filename' => basename($filename), 'differences' => $result) );
@@ -89,7 +89,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
 
 	       while (($line = fgets($fh)) !== false) {
 	            $line = trim($line);
-                    $data = explode(",", $line);
+                    $data = str_getcsv($line);
 
 		    for( $i=0; $i < sizeof($header); $i++) {
                          $val_array[ $headerTitle2DBColumnName[ $header[$i] ] ] = trim( $data[$i] );
