@@ -49,8 +49,7 @@ function remittanceVerify($filename) {
           $line = str_replace("\"", "", $line);
           preg_match($pattern, $line, $m) ;
           while (strlen($line) && 0 == sizeof($m)) {
-               $line = str_replace("\"", "", $line);
-               $tmp = explode(",",$line);
+	       $tmp = str_getcsv($line);
                $header[] = $tmp[0];
                $line = trim(fgets($fh));
                $line = str_replace("\"", "", $line);
@@ -77,8 +76,7 @@ function remittanceVerify($filename) {
           }
           $remittance_report = file($filename);
           if ( sizeof($headerTemplate) == sizeof($header) ) {
-               $data_header = trim(str_replace("\"", "", $remittance_report[6]));
-               $data_header = explode(",",$data_header);
+	       $data_header = str_getcsv(trim($remittance_report[6]));
                if ( sizeof($dataHeaderTemplate) < sizeof($data_header) ) {
                     $diff = array_diff($data_header, $dataHeaderTemplate ) ;
                     if (sizeof($diff)) 
@@ -87,9 +85,7 @@ function remittanceVerify($filename) {
                     return array( 'format_valid' => 'header and data header are fine' ) ;
                }
           } else if ( sizeof($headerTemplate2) == sizeof($header) ) {
-     
-               $data_header = trim(str_replace("\"", "", $remittance_report[4]));
-               $data_header = explode(",",$data_header);
+	       $data_header = str_getcsv(trim($remittance_report[4]));
                if ( sizeof($dataHeaderTemplate) < sizeof($data_header) ) {
                     $diff = array_diff($data_header, $dataHeaderTemplate ) ;
                     if (sizeof($diff)) 

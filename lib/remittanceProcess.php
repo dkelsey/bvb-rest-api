@@ -95,8 +95,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
           $line = str_replace("\"", "", $line);
           preg_match($pattern, $line, $m) ;
           while (strlen($line) && 0 == sizeof($m)) {
-               $line = str_replace("\"", "", $line);
-               $tmp = explode(",",$line);
+	       $tmp = str_getcsv($line);
                $header[] = $tmp[0];
                $headerData[] = $tmp[1];
                $line = trim(fgets($fh));
@@ -124,8 +123,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
           }
           $remittance_report = file($filename);
           if ( sizeof($headerTemplate) == sizeof($header) ) {
-               $data_header = trim(str_replace("\"", "", $remittance_report[6]));
-               $data_header = explode(",",$data_header);
+	       $data_header = str_getcsv(trim($remittance_report[6]));
                if ( sizeof($dataHeaderTemplate) < sizeof($data_header) ) {
                     $diff = array_diff($data_header, $dataHeaderTemplate ) ;
                     if (sizeof($diff)) 
@@ -173,7 +171,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
 			 $line = str_replace('"','',$line);
 			 if ( 80 < strlen($line) ) {
 
-                            $line_data = explode(",",$line);
+			    $line_data = str_getcsv($line);
 			    for ($n=0; $n<sizeof($data_header); $n++) {
 			         $data_data[ $dataHeader2DBColumnName[ $data_header[$n] ] ] =  trim( $line_data[$n] ) ;
 			    }
@@ -201,8 +199,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
                }
           } else if ( sizeof($headerTemplate2) == sizeof($header) ) {
      
-               $data_header = trim(str_replace("\"", "", $remittance_report[4]));
-               $data_header = explode(",",$data_header);
+	       $data_header = str_getcsv( trim($remittance_report[4]) );
                if ( sizeof($dataHeaderTemplate) < sizeof($data_header) ) {
                     $diff = array_diff($data_header, $dataHeaderTemplate ) ;
                     if (sizeof($diff)) 
@@ -260,7 +257,7 @@ $myDB = new wpdb(BVB_DB_USER, BVB_DB_PASSWORD, BVB_DB_NAME, BVB_DB_HOST);
 			 $line = str_replace('"','',$line);
 			 if ( 80 < strlen($line) ) {
 
-                            $line_data = explode(",",$line);
+			    $line_data = str_getcsv($line);
 			    for ($n=0; $n<sizeof($data_header); $n++) {
 			         $data_data[ $dataHeader2DBColumnName[ $data_header[$n] ] ] =  trim( $line_data[$n] ) ;
 			    }
